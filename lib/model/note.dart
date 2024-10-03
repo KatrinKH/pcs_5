@@ -161,3 +161,4 @@ final List<Note> notes = [
     releaseDate: '9 ноября 2022',
   ),
 ];
+

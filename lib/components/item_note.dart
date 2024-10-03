@@ -30,17 +30,25 @@ class _ItemNoteState extends State<ItemNote> {
             borderRadius: BorderRadius.circular(16),
           ),
           width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.7,
+          height: MediaQuery.of(context).size.height * 0.3, 
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, 
               children: [
-                Expanded(child: Center(child: Image.asset(widget.note.imageUrl, fit: BoxFit.cover))),
+                Center(
+                  child: Text(
+                    widget.note.title,
+                    style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                ),
+                SizedBox(height: 8),
+                Expanded(
+                  child: Center(child: Image.asset(widget.note.imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity)),
+                  ),
                 SizedBox(height: 8), 
-                Text('- Цена: ${widget.note.price} рублей', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16)),
+                Text('- Цена: ${widget.note.price} рублей', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16), overflow: TextOverflow.ellipsis),
                 SizedBox(height: 4), 
-                Text('${widget.note.textNote}', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16)),
+                Text('${widget.note.textNote}', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16), overflow: TextOverflow.ellipsis),
                 SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
