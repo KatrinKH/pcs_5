@@ -1,7 +1,72 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class UserData {
+  static final UserData _instance = UserData._internal();
+
+  factory UserData() {
+    return _instance;
+  }
+
+  UserData._internal();
+
+  String name = 'Дмитрий Куплинов';
+  String email = 'D.Kupl1n0v@example.com';
+  String city = 'Москва';
+
+  void updateUserData(String newName, String newEmail, String newCity) {
+    name = newName;
+    email = newEmail;
+    city = newCity;
+  }
+}
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final UserData _userData = UserData();
+
+  void _editProfile() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController nameController = TextEditingController(text: _userData.name);
+        TextEditingController emailController = TextEditingController(text: _userData.email);
+        TextEditingController cityController = TextEditingController(text: _userData.city);
+
+        return AlertDialog(
+          title: const Text('Редактировать профиль'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: nameController, decoration: const InputDecoration(labelText: 'Имя Фамилия')),
+              TextField(controller: emailController, decoration: const InputDecoration(labelText: 'Почта')),
+              TextField(controller: cityController, decoration: const InputDecoration(labelText: 'Город')),
+            ],
+          ),
+          actions: [
+            TextButton(child: const Text('Отмена'), onPressed: () => Navigator.of(context).pop()),
+            TextButton(
+              child: const Text('Сохранить'),
+              onPressed: () {
+                _userData.updateUserData(
+                  nameController.text,
+                  emailController.text,
+                  cityController.text,
+                );
+                Navigator.of(context).pop();
+                setState(() {}); 
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,56 +75,39 @@ class ProfilePage extends StatelessWidget {
         title: const Center(child: Text('Профиль')),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/profile/unknown.jpg'), 
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Дмитрий Куплинов',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage('assets/profile/unknown.jpg'), 
               ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'D.Kupl1n0v@example.com',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+              const SizedBox(height: 20),
+              Text(_userData.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Почта:', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  const SizedBox(width: 10),
+                  Text(_userData.email, style: const TextStyle(fontSize: 16)),
+                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Личная информация'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Настройки'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Уведомления'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.help),
-              title: const Text('Помощь'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Выйти'),
-              onTap: () {},
-            ),
-          ],
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Город:', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  const SizedBox(width: 10),
+                  Text(_userData.city, style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: _editProfile, child: const Text('Редактировать')),
+            ],
+          ),
         ),
       ),
     );
