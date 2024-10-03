@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pcs_5/pages/Favorites_page.dart';
+import 'package:pcs_5/pages/favorites_page.dart';
 import 'package:pcs_5/pages/home_page.dart';
-import 'package:pcs_5/pages/Profile_page.dart';
+import 'package:pcs_5/pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
