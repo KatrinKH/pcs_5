@@ -38,7 +38,7 @@ class ItemNote extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
+                    icon: Icon(Icons.favorite, color: Colors.red),
                     onPressed: () {
                       showDialog(
                         context: context,
