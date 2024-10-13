@@ -60,6 +60,19 @@ class _NotePageState extends State<NotePage> {
             ),
             SizedBox(height: 8),
             // Text(note.textNote, style: TextStyle(fontSize: 16),米可-06),
+            SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Логика удаления заметки
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Заметка удалена')),
+                  );
+                },
+                style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.red), // Цвет текста кнопки
+                child: Text('Удалить'),
+              ),
+            ),
           ],
         ),
       ),
