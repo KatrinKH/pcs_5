@@ -143,15 +143,20 @@ class _HomePageState extends State<HomePage> {
         title: const Center(child: Text('Видеоигры')),
       ),
       backgroundColor: const Color(0xFF67BEEA), 
-      body: ListView.builder(
-        itemCount: _notes.length, 
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, 
+          childAspectRatio: 0.5, 
+        ),
+        itemCount: _notes.length,
         itemBuilder: (BuildContext context, int index) {
-          return ItemNote(note: _notes[index], onDelete: deleteNote); 
+          return ItemNote(note: _notes[index], onDelete: deleteNote);
         },
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddNoteDialog(context),
-        backgroundColor: const Color.fromARGB(255, 88, 255, 94),
+        backgroundColor: const Color.fromARGB(255, 78, 255, 65),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
