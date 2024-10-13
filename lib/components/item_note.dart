@@ -22,7 +22,7 @@ class _ItemNoteState extends State<ItemNote> {
       child: GestureDetector(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => NotePage(note: widget.note)),
+          MaterialPageRoute(builder: (context) => NotePage(note: widget.note, onDelete: widget.onDelete)),
         ),
         child: Container(
           decoration: BoxDecoration(
@@ -39,12 +39,10 @@ class _ItemNoteState extends State<ItemNote> {
                 Center(
                   child: Text(
                     widget.note.title,
-                    style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                ),
+                    style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis)),
                 SizedBox(height: 8),
                 Expanded(
-                  child: Center(child: Image.asset(widget.note.imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity)),
-                  ),
+                  child: Center(child: Image.asset(widget.note.imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity))),
                 SizedBox(height: 8), 
                 Text('- Цена: ${widget.note.price} рублей', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16), overflow: TextOverflow.ellipsis),
                 SizedBox(height: 4), 

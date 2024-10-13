@@ -3,14 +3,43 @@ import 'package:pcs_5/model/note.dart';
 
 class NotePage extends StatefulWidget {
   final Note note; 
+  final Function(Note) onDelete; 
 
-  const NotePage({super.key, required this.note}); 
+  const NotePage({super.key, required this.note, required this.onDelete}); 
 
   @override
   _NotePageState createState() => _NotePageState();
 }
 
 class _NotePageState extends State<NotePage> {
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Подтверждение удаления', style: TextStyle(fontSize: 20)),
+          content: Text('Вы уверены, что хотите удалить игру?', style: TextStyle(fontSize: 16)),
+          actions: [
+            TextButton(
+              child: Text('Отмена'),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+            ),
+            TextButton(
+              child: Text('Удалить'),
+              onPressed: () {
+                widget.onDelete(widget.note);
+                Navigator.of(context).pop(); 
+                Navigator.of(context).pop(); 
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +93,11 @@ class _NotePageState extends State<NotePage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Логика удаления заметки
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Заметка удалена')),
-                  );
+                  _showDeleteConfirmationDialog(context);
                 },
-                style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.red), // Цвет текста кнопки
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.red, 
+                ),
                 child: Text('Удалить'),
               ),
             ),
