@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pcs_5/model/note.dart';
 import 'package:pcs_5/pages/favorites_page.dart';
 import 'package:pcs_5/pages/home_page.dart';
 import 'package:pcs_5/pages/profile_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 126, 96, 178)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(), 
+      home: const MyHomePage(),
     );
   }
 }
@@ -34,11 +35,42 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    FavoritesPage(),
-    ProfilePage(),
-  ];
+  List<Note> _favoriteNotes = []; 
+
+  void _toggleFavorite(Note note) {
+    setState(() {
+      if (_favoriteNotes.contains(note)) {
+        _favoriteNotes.remove(note);
+      } else {
+        _favoriteNotes.add(note);
+      }
+    });
+  }
+
+  void _removeFromFavorites(Note note) {
+    setState(() {
+      _favoriteNotes.remove(note);
+    });
+  }
+
+  bool _isFavorite(Note note) {
+    return _favoriteNotes.contains(note);
+  }
+
+  List<Widget> _widgetOptions() {
+    return [
+      HomePage(
+        favoriteNotes: _favoriteNotes,
+        onFavoriteToggle: _toggleFavorite,
+        isFavorite: _isFavorite,
+      ),
+      FavoritesPage(
+        favoriteNotes: _favoriteNotes,
+        onRemoveFromFavorites: _removeFromFavorites, 
+      ),
+      const ProfilePage(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: _widgetOptions().elementAt(_selectedIndex), 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

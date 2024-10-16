@@ -1,71 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:pcs_5/model/note.dart'; 
-import 'package:pcs_5/pages/note_page.dart';
+import 'package:pcs_5/model/note.dart';
 
-class ItemNote extends StatefulWidget {
-  const ItemNote({super.key, required this.note, required this.onDelete});
-  
-  final Note note; 
+class ItemNote extends StatelessWidget {
+  final Note note;
   final Function(Note) onDelete;
+  final bool isFavorite;
+  final Function(Note) onFavoriteToggle;
 
-  @override
-  _ItemNoteState createState() => _ItemNoteState();
-}
-
-class _ItemNoteState extends State<ItemNote> {
-  bool isFavorite = false;
+  const ItemNote({
+    super.key,
+    required this.note,
+    required this.onDelete,
+    required this.isFavorite,
+    required this.onFavoriteToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NotePage(note: widget.note, onDelete: widget.onDelete)),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 255, 255, 255), 
-            borderRadius: BorderRadius.circular(16),
-          ),
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.3, 
-          child: Padding(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 2),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, 
+        children: [
+          Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, 
-              children: [
-                Center(
-                  child: Text(
-                    widget.note.title,
-                    style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis)),
-                SizedBox(height: 8),
-                Expanded(
-                  child: Center(child: Image.asset(widget.note.imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity))),
-                SizedBox(height: 8), 
-                Text('- Цена: ${widget.note.price} рублей', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16), overflow: TextOverflow.ellipsis),
-                SizedBox(height: 4), 
-                Text('${widget.note.textNote}', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16), overflow: TextOverflow.ellipsis),
-                SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.favorite,
-                      color: isFavorite ? Colors.red : Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
-                  ),
-                ),
-              ],
+            child: Center( 
+              child: Text(
+                note.title,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center, 
+              ),
             ),
           ),
-        ),
+          Expanded(child: Center(child: Image.asset(note.imageUrl, fit: BoxFit.cover))),
+          const SizedBox(height: 4),
+          
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              '- Цена: ${note.price} рублей',
+              style: const TextStyle(fontSize: 16, color: Colors.black), 
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(height: 4),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              note.textNote,
+              style: const TextStyle(fontSize: 16, color: Colors.black), 
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                onFavoriteToggle(note); 
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

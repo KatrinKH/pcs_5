@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:pcs_5/components/item_note.dart';
 import 'package:pcs_5/model/note.dart';
-import 'package:pcs_5/pages/add_note_page.dart'; 
+import 'package:pcs_5/pages/add_note_page.dart';
+import 'package:pcs_5/pages/note_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final List<Note> favoriteNotes; 
+  final Function(Note) onFavoriteToggle; 
+  final bool Function(Note) isFavorite; 
+
+  const HomePage({
+    super.key,
+    required this.favoriteNotes,
+    required this.onFavoriteToggle,
+    required this.isFavorite,
+  });
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Note> _notes = List.from(notes);
+  List<Note> _notes = List.from(notes); 
 
   void deleteNote(Note note) {
     setState(() {
@@ -47,11 +57,32 @@ class _HomePageState extends State<HomePage> {
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.5,
+          childAspectRatio: 0.5, 
+          crossAxisSpacing: 16.0, 
+          mainAxisSpacing: 16.0,  
         ),
+        padding: const EdgeInsets.all(16.0), 
         itemCount: _notes.length,
         itemBuilder: (BuildContext context, int index) {
-          return ItemNote(note: _notes[index], onDelete: deleteNote);
+          Note note = _notes[index];
+          bool isFavorite = widget.isFavorite(note); 
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotePage(note: note, onDelete: deleteNote),
+                ),
+              );
+            },
+            child: ItemNote(
+              note: note,
+              onDelete: deleteNote,
+              isFavorite: isFavorite,
+              onFavoriteToggle: widget.onFavoriteToggle,
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
